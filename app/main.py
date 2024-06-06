@@ -27,12 +27,11 @@ class Ship:
                 self.decks.append(Deck(row, start[1]))
 
     def get_deck(self, row: int, column: int) -> Deck | None:
-        decks = list(
+        if decks := list(
             filter(lambda deck: (deck.row == row
                                  and deck.column == column),
                    self.decks)
-        )
-        if decks:
+        ):
             return decks[0]
 
     def fire(self, row: int, column: int) -> None:
@@ -57,12 +56,11 @@ class Battleship:
                 self.field[ship_deck] = ship
 
     def fire(self, location: tuple) -> str:
-        filtered = list(
+        if not len(filtered := list(
             filter(lambda deck: (deck.row == location[0]
                                  and deck.column == location[1]),
                    self.field.keys())
-        )
-        if not filtered:
+        )):
             return "Miss!"
 
         attacked_deck = filtered[0]
@@ -72,8 +70,7 @@ class Battleship:
             self.field[attacked_deck].fire(location[0], location[1])
             if self.field[attacked_deck].is_drowned:
                 return "Sunk!"
-            else:
-                return "Hit!"
+            return "Hit!"
 
     def print(self) -> None:
         for deck in self.field.keys():
